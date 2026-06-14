@@ -1,4 +1,4 @@
-export TARGET = iphone:clang:18.6:14.0
+export TARGET = iphone:clang:18.6:15.0
 export SDK_PATH = $(THEOS)/sdks/iPhoneOS18.6.sdk/
 export SYSROOT = $(SDK_PATH)
 export ARCHS = arm64
@@ -14,25 +14,25 @@ ifneq ($(JAILBROKEN),1)
 export DEBUGFLAG = -ggdb -Wno-unused-command-line-argument -L$(THEOS_OBJ_DIR) -F$(_THEOS_LOCAL_DATA_DIR)/$(THEOS_OBJ_DIR_NAME)/install/Library/Frameworks
 MODULES = jailed
 endif
-PACKAGE_NAME = YTLitePlus
+PACKAGE_NAME = YTModPlus
 PACKAGE_VERSION = X.X.X-X.X
 
 INSTALL_TARGET_PROCESSES = YouTube
-TWEAK_NAME = YTLitePlus
+TWEAK_NAME = YTModPlus
 DISPLAY_NAME = YouTube
 BUNDLE_ID = com.google.ios.youtube
 
-YTLitePlus_FILES = YTLitePlus.xm $(shell find Source -name '*.xm' -o -name '*.x' -o -name '*.m')
-YTLitePlus_FRAMEWORKS = UIKit Security
-YTLitePlus_INJECT_DYLIBS = Tweaks/YTLite/var/jb/Library/MobileSubstrate/DynamicLibraries/YTLite.dylib .theos/obj/libFLEX.dylib .theos/obj/YTUHD.dylib .theos/obj/YouPiP.dylib .theos/obj/YouTubeDislikesReturn.dylib .theos/obj/YTABConfig.dylib .theos/obj/DontEatMyContent.dylib .theos/obj/YTVideoOverlay.dylib .theos/obj/YouTimeStamp.dylib .theos/obj/YouGroupSettings.dylib
-YTLitePlus_EMBED_LIBRARIES = $(THEOS_OBJ_DIR)/libcolorpicker.dylib
-YTLitePlus_EMBED_FRAMEWORKS = $(_THEOS_LOCAL_DATA_DIR)/$(THEOS_OBJ_DIR_NAME)/install_Alderis.xcarchive/Products/var/jb/Library/Frameworks/Alderis.framework
-YTLitePlus_CFLAGS = -fobjc-arc -Wno-deprecated-declarations -Wno-unused-but-set-variable -DTWEAK_VERSION=\"$(PACKAGE_VERSION)\"
-YTLitePlus_EMBED_BUNDLES = $(wildcard Bundles/*.bundle)
-YTLitePlus_EMBED_EXTENSIONS = $(wildcard Extensions/*.appex)
-YTLitePlus_IPA = ./tmp/Payload/YouTube.app
-YTLitePlus_CFLAGS = -fobjc-arc -Wno-deprecated-declarations -Wno-unsupported-availability-guard -Wno-unused-but-set-variable -DTWEAK_VERSION=$(PACKAGE_VERSION) $(EXTRA_CFLAGS)
-YTLitePlus_USE_FISHHOOK = 0
+YTModPlus_FILES = YTModPlus.xm $(shell find Source -name '*.xm' -o -name '*.x' -o -name '*.m')
+YTModPlus_FRAMEWORKS = UIKit Security
+YTModPlus_INJECT_DYLIBS = Tweaks/YouMod/Library/MobileSubstrate/DynamicLibraries/YouMod.dylib .theos/obj/libFLEX.dylib .theos/obj/YTUHD.dylib .theos/obj/YouPiP.dylib .theos/obj/YouTubeDislikesReturn.dylib .theos/obj/YTABConfig.dylib .theos/obj/DontEatMyContent.dylib .theos/obj/YTVideoOverlay.dylib .theos/obj/YouTimeStamp.dylib .theos/obj/YouGroupSettings.dylib
+YTModPlus_EMBED_LIBRARIES = $(THEOS_OBJ_DIR)/libcolorpicker.dylib
+YTModPlus_EMBED_FRAMEWORKS = $(_THEOS_LOCAL_DATA_DIR)/$(THEOS_OBJ_DIR_NAME)/install_Alderis.xcarchive/Products/Library/Frameworks/Alderis.framework
+YTModPlus_CFLAGS = -fobjc-arc -Wno-deprecated-declarations -Wno-unused-but-set-variable -DTWEAK_VERSION=\"$(PACKAGE_VERSION)\"
+YTModPlus_EMBED_BUNDLES = $(wildcard Bundles/*.bundle)
+YTModPlus_EMBED_EXTENSIONS = $(wildcard Extensions/*.appex)
+YTModPlus_IPA = ./tmp/Payload/YouTube.app
+YTModPlus_CFLAGS = -fobjc-arc -Wno-deprecated-declarations -Wno-unsupported-availability-guard -Wno-unused-but-set-variable -DTWEAK_VERSION=$(PACKAGE_VERSION) $(EXTRA_CFLAGS)
+YTModPlus_USE_FISHHOOK = 0
 
 include $(THEOS)/makefiles/common.mk
 ifneq ($(JAILBROKEN),1)
@@ -45,23 +45,23 @@ FINALPACKAGE = 1
 REMOVE_EXTENSIONS = 1
 CODESIGN_IPA = 0
 
-YTLITE_PATH = Tweaks/YTLite
-YTLITE_VERSION ?= $(shell curl -s https://api.github.com/repos/dayanch96/YTLite/releases/latest | grep '"tag_name"' | sed 's/.*"v\(.*\)".*/\1/')
+YOUMOD_PATH = Tweaks/YTLite
+YOUMOD_VERSION ?= $(shell curl -s https://api.github.com/repos/dayanch96/YTLite/releases/latest | grep '"tag_name"' | sed 's/.*"v\(.*\)".*/\1/')
 ifeq ($(YTLITE_VERSION),)
 $(error Failed to fetch latest YTLite version from GitHub API)
 endif
-YTLITE_DEB = $(YTLITE_PATH)/com.dvntm.ytlite_$(YTLITE_VERSION)_iphoneos-arm64.deb
-YTLITE_DYLIB = $(YTLITE_PATH)/var/jb/Library/MobileSubstrate/DynamicLibraries/YTLite.dylib
-YTLITE_BUNDLE = $(YTLITE_PATH)/var/jb/Library/Application\ Support/YTLite.bundle
+YOUMOD_DEB = $(YOUMOD_PATH)/dev.water888.youmod_$(YOUMOD_VERSION)_iphoneos-arm64.deb
+YOUMOD_DYLIB = $(YTLITE_PATH)/Library/MobileSubstrate/DynamicLibraries/YouMod.dylib
+YOUMOD_BUNDLE = $(YTLITE_PATH)/Library/Application\ Support/YouMod.bundle
 
 internal-clean::
-	@rm -rf $(YTLITE_PATH)/*
+	@rm -rf $(YOUMOD_PATH)/*
 
 ifneq ($(JAILBROKEN),1)
 before-all::
 	@if [[ ! -f $(YTLITE_DEB) ]]; then \
         	rm -rf $(YTLITE_PATH)/*; \
-        	$(PRINT_FORMAT_BLUE) "Downloading YTLite"; \
+        	$(PRINT_FORMAT_BLUE) "Downloading YouMod"; \
 	fi
 before-all::
 	@if [[ ! -f $(YTLITE_DEB) ]]; then \
